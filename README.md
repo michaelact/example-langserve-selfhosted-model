@@ -27,51 +27,20 @@ pip install .
 
 ## Usage
 
-By default, this uses OpenAI. So you will need to set your OpenAI API key:
+You will need to set environment variables, by creating `.env` file which contains:
 
 ```
-export OPENAI_API_KEY="sk-..."
+HUGGINGFACEHUB_API_TOKEN="hf_..."
+HUGGINGFACEHUB_REPO_ID="user/repo"
 ```
 
 To run the project locally, run
 
 ```
-make start
-```
-
-This will launch a webserver on port 8001.
-
-Or via docker compose (does not use hot reload by default):
-
-```
 docker compose up
 ```
 
-## Deploy
-
-To deploy the project, first build the docker image:
-
-```
-docker build . -t langserve_launch_example:latest
-```
-
-Then run the image:
-
-```
-docker run -p 8001:8001 -e PORT=8001 langserve_launch_example:latest
-```
-
-Don't forget to add any needed environment variables!
-
-## Deploy to GCP
-
-You can deploy to GCP Cloud Run using the following command:
-
-First create a `.env.gcp.yaml` file with the contents from `.env.gcp.yaml.example` and fill in the values. Then run:
-
-```
-make deploy_gcp
-```
+This will launch a webserver on port 8001.
 
 ## Contributing
 

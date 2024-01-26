@@ -2,14 +2,20 @@ from fastapi import FastAPI
 from langserve import add_routes
 
 import os
-from langchain_community.llms import HuggingFaceHub
-from langchain_community.chat_models.huggingface import ChatHuggingFace
+from langchain.chains import LLMChain
 
-llm = HuggingFaceHub(repo_id=os.environ['HUGGINGFACEHUB_REPO_ID'])
-model = ChatHuggingFace(llm=llm)
+from langchain_community.llms.huggingface_pipeline import HuggingFacePipeline
+from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+
+model_id = os.environ['HUGGINGFACEHUB_REPO_ID']
+tokenizer = AutoTokenizer.from_pretrained(model_id, device_map="auto")
+model = AutoModelForCausalLM.from_pretrained(model_id, device_map="auto")
+pipe = pipeline("text-generation", model=model, tokenizer=tokenizer)
+hf = HuggingFacePipeline(pipeline=pipe)
+
 app = FastAPI(title="LangServe Launch Example")
 
-add_routes(app, model)
+add_routes(app, hf)
 
 if __name__ == "__main__":
     import uvicorn
